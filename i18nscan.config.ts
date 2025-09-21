@@ -1,6 +1,4 @@
-import { defineConfig } from "@i18nguard/cli";
-
-export default defineConfig({
+export default {
   library: "auto", // "i18next" | "formatjs" | "lingui" | "auto"
   src: ["src/**/*.{ts,tsx,js,jsx}"],
   locales: ["en", "fr", "es"],
@@ -39,4 +37,4 @@ export default defineConfig({
     path: "reports/i18n/baseline.json",
     mode: "newIssuesOnly"
   },
-});
+};

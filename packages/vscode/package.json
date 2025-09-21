@@ -133,12 +133,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/i18nguard/i18nguard.git",
+    "url": "git+https://github.com/deuwi/i18nguard.git",
     "directory": "packages/vscode"
   },
   "bugs": {
-    "url": "https://github.com/i18nguard/i18nguard/issues"
+    "url": "https://github.com/deuwi/i18nguard/issues"
   },
-  "homepage": "https://github.com/i18nguard/i18nguard#readme",
+  "homepage": "https://github.com/deuwi/i18nguard#readme",
   "license": "MIT"
 }

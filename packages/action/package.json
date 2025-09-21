@@ -10,8 +10,13 @@
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt"
+    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt",
+    "prepublishOnly": "pnpm build"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [
     "github-action",
     "i18n",
@@ -19,6 +24,18 @@
   ],
   "author": "i18nGuard Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deuwi/i18nguard.git",
+    "directory": "packages/action"
+  },
+  "bugs": {
+    "url": "https://github.com/deuwi/i18nguard/issues"
+  },
+  "homepage": "https://github.com/deuwi/i18nguard#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@i18nguard/core": "workspace:*",
     "@i18nguard/cli": "workspace:*",

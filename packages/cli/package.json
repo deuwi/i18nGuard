@@ -1,6 +1,6 @@
 {
   "name": "@i18nguard/cli",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Command-line interface for i18nGuard",
   "type": "module",
   "main": "./dist/index.js",
@@ -13,11 +13,12 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly",
     "dev": "tsup --watch",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "i18n",
@@ -26,10 +27,22 @@
   ],
   "author": "i18nGuard Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deuwi/i18nguard.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/deuwi/i18nguard/issues"
+  },
+  "homepage": "https://github.com/deuwi/i18nguard#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
-    "@i18nguard/core": "workspace:*",
-    "@i18nguard/adapters": "workspace:*",
-    "@i18nguard/reporter": "workspace:*",
+  "@i18nguard/core": "^1.0.3",
+  "@i18nguard/adapters": "^1.0.3",
+  "@i18nguard/reporter": "^1.0.3",
     "commander": "^11.0.0",
     "chalk": "^5.3.0",
     "ora": "^7.0.1",

@@ -1,6 +1,7 @@
 # i18nGuard
 
 A comprehensive i18n linting and validation tool for JavaScript/TypeScript projects supporting i18next, React-Intl (FormatJS), and Lingui.
+![Sponsor](https://img.shields.io/github/sponsors/deuwi?style=social)
 
 ## ✨ Features
 
@@ -272,6 +273,12 @@ jobs:
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+
+## 🫶 Sponsors
+If you or your company find i18nGuard useful, consider sponsoring to support ongoing development.
+
+    See SPONSORS.md for tiers and benefits.
+    Become a sponsor via GitHub Sponsors.
 
 ## 📄 License
 

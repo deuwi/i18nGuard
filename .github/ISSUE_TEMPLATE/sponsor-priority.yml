@@ -1,0 +1,34 @@
+name: "Sponsor priority request"
+description: "Demande de priorisation (réservé aux sponsors actifs)"
+title: "[Sponsor] <titre court>"
+labels: ["sponsor-priority"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: "Merci de soutenir le projet ! Indiquez le contexte et l’impact."
+  - type: input
+    id: sponsor-handle
+    attributes:
+      label: Handle GitHub du sponsor
+      description: "Votre compte sponsor (pour vérification)"
+      placeholder: "ex: @deuwi"
+    validations:
+      required: true
+  - type: textarea
+    id: contexte
+    attributes:
+      label: Contexte / besoin
+      description: "Expliquez le cas d’usage, la stack et l’urgence"
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact attendu
+      description: "Ex: réduction de régressions i18n, gain de temps en CI, etc."
+  - type: dropdown
+    id: palier
+    attributes:
+      label: Palier de sponsoring
+      options: ["Supporter", "Team", "Bronze", "Silver", "Gold"]

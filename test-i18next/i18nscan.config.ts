@@ -19,7 +19,7 @@ export default {
   
   catalogs: {
     i18next: {
-      pathPattern: 'public/locales/{locale}/{namespace}.json',
+      pathPattern: 'public/locales/{locale}/{ns}.json',
       namespaces: ['common']
     }
   },

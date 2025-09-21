@@ -31,7 +31,7 @@ async function run(): Promise<void> {
 
     // Run scan
     const scanner = new Scanner(config);
-    const result = await scanner.scan(config);
+    const result = await scanner.scan();
 
     // Generate report
     const reportPath = `i18nguard-report.${reportFormat}`;

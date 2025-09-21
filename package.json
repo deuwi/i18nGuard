@@ -10,7 +10,8 @@
     "examples/*"
   ],
   "scripts": {
-    "build": "pnpm -r --filter=\"./packages/*\" build",
+    "build": "pnpm -r --filter ./packages/* build",
+    "build:examples": "pnpm -r --filter ./examples/* build",
     "dev": "pnpm -r --parallel dev",
     "test": "pnpm -r test",
     "test:coverage": "pnpm -r test:coverage",
@@ -40,13 +41,13 @@
   ],
   "author": "i18nGuard Team",
   "license": "MIT",
-  "homepage": "https://github.com/i18nguard/i18nguard#readme",
+  "homepage": "https://github.com/deuwi/i18nguard#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/i18nguard/i18nguard.git"
+    "url": "git+https://github.com/deuwi/i18nguard.git"
   },
   "bugs": {
-    "url": "https://github.com/i18nguard/i18nguard/issues"
+    "url": "https://github.com/deuwi/i18nguard/issues"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",

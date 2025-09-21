@@ -13,7 +13,7 @@ Thank you for your interest in contributing to i18nGuard! This document provides
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/i18nguard/i18nguard.git
+git clone https://github.com/deuwi/i18nguard.git
 cd i18nguard
 ```
 

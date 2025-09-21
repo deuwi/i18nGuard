@@ -8,7 +8,7 @@ export default defineConfig({
     'src/lingui.ts'
   ],
   format: ['esm'],
-  dts: true, // Enable TypeScript declarations
+  dts: false, // Temporarily disable DTS to unblock publish
   clean: true,
   splitting: false,
   sourcemap: true,

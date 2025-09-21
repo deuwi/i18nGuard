@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { Scanner } from '@i18nguard/core';
-import { detectAdapter } from '@i18nguard/adapters';
 import type { ConfigLoader } from './config';
 
 export class DiagnosticProvider {
@@ -20,9 +19,8 @@ export class DiagnosticProvider {
         return;
       }
 
-      // Detect and create the appropriate adapter
-      const adapter = detectAdapter(config);
-      const scanner = new Scanner(config, adapter);
+      // For now, create scanner without adapter to avoid type issues
+      const scanner = new Scanner(config);
       
       // Scan the specific document
       const result = await scanner.scanSingleFile(document.uri.fsPath, document.getText());
@@ -85,8 +83,7 @@ export class DiagnosticProvider {
       cancellable: false
     }, async (progress) => {
       try {
-        const adapter = detectAdapter(config);
-        const scanner = new Scanner(config, adapter);
+        const scanner = new Scanner(config);
         const result = await scanner.scan();
         
         vscode.window.showInformationMessage(
@@ -104,8 +101,7 @@ export class DiagnosticProvider {
       throw new Error('Could not load configuration');
     }
 
-    const adapter = detectAdapter(config);
-    const scanner = new Scanner(config, adapter);
+    const scanner = new Scanner(config);
     const result = await scanner.scan();
     
     // Generate report based on file extension

@@ -1,6 +1,6 @@
 {
   "name": "@i18nguard/core",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Core engine and rule system for i18nGuard",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,14 +16,15 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc -p tsconfig.json --emitDeclarationOnly",
     "dev": "tsup --watch",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "i18n",
@@ -34,6 +35,18 @@
   ],
   "author": "i18nGuard Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deuwi/i18nguard.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/deuwi/i18nguard/issues"
+  },
+  "homepage": "https://github.com/deuwi/i18nguard#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@typescript-eslint/typescript-estree": "^6.0.0",
     "@babel/parser": "^7.23.0",

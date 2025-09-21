@@ -1,0 +1,59 @@
+name: 'i18nGuard'
+description: 'Comprehensive i18n linting and validation for JavaScript/TypeScript projects'
+author: 'i18nGuard Team'
+
+branding:
+  icon: 'globe'
+  color: 'blue'
+
+inputs:
+  config-path:
+    description: 'Path to the i18nGuard configuration file'
+    required: false
+    default: 'i18nscan.config.ts'
+  
+  fail-on-error:
+    description: 'Fail the action if any errors are found'
+    required: false
+    default: 'true'
+  
+  comment-pr:
+    description: 'Comment on the PR with the results'
+    required: false
+    default: 'true'
+  
+  upload-sarif:
+    description: 'Upload SARIF results to GitHub Security tab'
+    required: false
+    default: 'true'
+  
+  report-format:
+    description: 'Format for the generated report (json, sarif, html)'
+    required: false
+    default: 'sarif'
+  
+  baseline-path:
+    description: 'Path to baseline file for comparison'
+    required: false
+  
+  working-directory:
+    description: 'Working directory for the action'
+    required: false
+    default: '.'
+
+outputs:
+  results-path:
+    description: 'Path to the generated results file'
+  
+  total-issues:
+    description: 'Total number of issues found'
+  
+  new-issues:
+    description: 'Number of new issues (when using baseline)'
+  
+  coverage-percentage:
+    description: 'Overall translation coverage percentage'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

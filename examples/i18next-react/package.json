@@ -1,0 +1,27 @@
+{
+  "name": "i18next-react-example",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "i18next": "^23.0.0",
+    "react-i18next": "^13.0.0"
+  },
+  "devDependencies": {
+    "@i18nguard/cli": "workspace:*",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint:i18n": "i18nguard scan",
+    "lint:i18n:report": "i18nguard report --format html"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "@i18nguard/cli",
+  "version": "1.0.0",
+  "description": "Command-line interface for i18nGuard",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "i18nguard": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "i18n",
+    "cli",
+    "tool"
+  ],
+  "author": "i18nGuard Team",
+  "license": "MIT",
+  "dependencies": {
+    "@i18nguard/core": "workspace:*",
+    "@i18nguard/adapters": "workspace:*",
+    "@i18nguard/reporter": "workspace:*",
+    "commander": "^11.0.0",
+    "chalk": "^5.3.0",
+    "ora": "^7.0.1",
+    "globby": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "tsup": "^8.0.0",
+    "vitest": "^1.0.0"
+  }
+}

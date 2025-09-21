@@ -1,0 +1,36 @@
+{
+  "name": "@i18nguard/reporter",
+  "version": "1.0.0",
+  "description": "Report generators for i18nGuard (JSON, SARIF, HTML)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "i18n",
+    "reporting",
+    "sarif",
+    "html"
+  ],
+  "author": "i18nGuard Team",
+  "license": "MIT",
+  "dependencies": {
+    "@i18nguard/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "tsup": "^8.0.0",
+    "vitest": "^1.0.0"
+  }
+}

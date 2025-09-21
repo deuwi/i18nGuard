@@ -1,0 +1,11 @@
+{
+  "hello": "Bonjour",
+  "welcome": "Bienvenue dans notre application",
+  "buttons": {
+    "submit": "Soumettre",
+    "cancel": "Annuler"
+  },
+  "navigation": {
+    "home": "Accueil"
+  }
+}

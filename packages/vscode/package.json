@@ -1,0 +1,144 @@
+{
+  "name": "i18nguard",
+  "displayName": "i18nGuard",
+  "description": "Comprehensive i18n linting and validation for VS Code",
+  "version": "1.0.0",
+  "publisher": "i18nguard",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "localization",
+    "linting",
+    "react",
+    "typescript",
+    "javascript"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "i18nguard.scan",
+        "title": "Scan for i18n Issues",
+        "category": "i18nGuard"
+      },
+      {
+        "command": "i18nguard.externalizeString",
+        "title": "Externalize String",
+        "category": "i18nGuard"
+      },
+      {
+        "command": "i18nguard.generateReport",
+        "title": "Generate Report",
+        "category": "i18nGuard"
+      }
+    ],
+    "configuration": {
+      "title": "i18nGuard",
+      "properties": {
+        "i18nguard.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable i18nGuard extension"
+        },
+        "i18nguard.library": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "i18next",
+            "formatjs",
+            "lingui"
+          ],
+          "default": "auto",
+          "description": "i18n library to use"
+        },
+        "i18nguard.configPath": {
+          "type": "string",
+          "default": "i18nscan.config.ts",
+          "description": "Path to i18nGuard config file"
+        },
+        "i18nguard.diagnostics.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable diagnostic messages"
+        },
+        "i18nguard.diagnostics.severity": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "default": "warning",
+          "description": "Default severity for diagnostics"
+        },
+        "i18nguard.quickFix.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable quick fix actions"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "typescript",
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
+      },
+      {
+        "id": "javascript",
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build": "tsup",
+    "build:simple": "node build.js",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "@vscode/vsce": "^2.19.0",
+    "esbuild": "^0.25.10",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@i18nguard/adapters": "workspace:*",
+    "@i18nguard/core": "workspace:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/i18nguard/i18nguard.git",
+    "directory": "packages/vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/i18nguard/i18nguard/issues"
+  },
+  "homepage": "https://github.com/i18nguard/i18nguard#readme",
+  "license": "MIT"
+}

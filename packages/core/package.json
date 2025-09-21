@@ -1,0 +1,54 @@
+{
+  "name": "@i18nguard/core",
+  "version": "1.0.0",
+  "description": "Core engine and rule system for i18nGuard",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "i18n",
+    "ast",
+    "linting",
+    "typescript",
+    "javascript"
+  ],
+  "author": "i18nGuard Team",
+  "license": "MIT",
+  "dependencies": {
+    "@typescript-eslint/typescript-estree": "^6.0.0",
+    "@babel/parser": "^7.23.0",
+    "@babel/traverse": "^7.23.0",
+    "@babel/types": "^7.23.0",
+    "intl-messageformat-parser": "^6.4.4",
+    "globby": "^14.0.0",
+    "fast-glob": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/babel__traverse": "^7.20.4",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "tsup": "^8.0.0",
+    "vitest": "^1.0.0",
+    "eslint": "^8.50.0"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "app.title": "Application de Test FormatJS",
+  "app.welcome": "Bienvenue dans notre application",
+  "app.description": "Ceci est une application de test pour l'internationalisation FormatJS",
+  "button.submit": "Envoyer",
+  "button.cancel": "Annuler",
+  "form.name.label": "Nom Complet",
+  "form.email.label": "Adresse Email",
+  "form.name.placeholder": "Entrez votre nom complet",
+  "form.email.placeholder": "Entrez votre adresse email",
+  "message.success": "Opération réalisée avec succès !",
+  "message.error": "Une erreur s'est produite. Veuillez réessayer.",
+  "navigation.home": "Accueil",
+  "navigation.about": "À Propos",
+  "navigation.contact": "Contact",
+  "user.greeting": "Bonjour, {name} !",
+  "item.count": "Vous avez {count, plural, =0 {aucun élément} =1 {un élément} other {# éléments}}",
+  "date.today": "Nous sommes le {date, date, full}",
+  "language.english": "Anglais",
+  "language.french": "Français"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "@i18nguard/action",
+  "version": "1.0.0",
+  "description": "GitHub Action for i18nGuard",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "package": "ncc build src/index.ts -o dist --source-map --license licenses.txt"
+  },
+  "keywords": [
+    "github-action",
+    "i18n",
+    "linting"
+  ],
+  "author": "i18nGuard Team",
+  "license": "MIT",
+  "dependencies": {
+    "@i18nguard/core": "workspace:*",
+    "@i18nguard/cli": "workspace:*",
+    "@i18nguard/reporter": "workspace:*",
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/io": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "tsup": "^8.0.0",
+    "vitest": "^1.0.0",
+    "@vercel/ncc": "^0.36.1"
+  }
+}

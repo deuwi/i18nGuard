@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "files": [],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/cli" },
+    { "path": "./packages/adapters" },
+    { "path": "./packages/reporter" },
+    { "path": "./packages/vscode" },
+    { "path": "./packages/action" }
+  ]
+}

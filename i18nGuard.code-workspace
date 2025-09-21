@@ -1,0 +1,55 @@
+{
+  "folders": [
+    {
+      "name": "i18nGuard Core",
+      "path": "./packages/core"
+    },
+    {
+      "name": "i18nGuard CLI", 
+      "path": "./packages/cli"
+    },
+    {
+      "name": "i18nGuard Adapters",
+      "path": "./packages/adapters"
+    },
+    {
+      "name": "i18nGuard VS Code Extension",
+      "path": "./packages/vscode"
+    },
+    {
+      "name": "Test i18next Project",
+      "path": "./test-i18next"
+    },
+    {
+      "name": "Test Project",
+      "path": "./test-project"
+    },
+    {
+      "name": "Example i18next React",
+      "path": "./examples/i18next-react"
+    }
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "typescript.validate.enable": true,
+    "typescript.format.enable": true,
+    "typescript.disableAutomaticTypeAcquisition": false,
+    "typescript.workspaceSymbols.scope": "allOpenProjects",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.vscode": false
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}

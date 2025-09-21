@@ -1,0 +1,57 @@
+{
+  "name": "@i18nguard/adapters",
+  "version": "1.0.0",
+  "description": "Framework adapters for i18nGuard (i18next, FormatJS, Lingui)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./i18next": {
+      "import": "./dist/i18next.js",
+      "types": "./dist/i18next.d.ts"
+    },
+    "./formatjs": {
+      "import": "./dist/formatjs.js",
+      "types": "./dist/formatjs.d.ts"
+    },
+    "./lingui": {
+      "import": "./dist/lingui.js",
+      "types": "./dist/lingui.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "i18n",
+    "adapters",
+    "i18next",
+    "formatjs",
+    "lingui"
+  ],
+  "author": "i18nGuard Team",
+  "license": "MIT",
+  "dependencies": {
+    "@i18nguard/core": "workspace:*",
+    "glob": "^11.0.3",
+    "globby": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}

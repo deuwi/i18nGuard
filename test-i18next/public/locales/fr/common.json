@@ -1,0 +1,25 @@
+{
+  "hello": "Bonjour",
+  "welcome": "Bienvenue dans notre application",
+  "buttons": {
+    "submit": "Envoyer",
+    "cancel": "Annuler"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos"
+  },
+  "description": "Ceci est une application de test pour l'internationalisation i18next",
+  "form": {
+    "name": "Nom",
+    "email": "Email",
+    "placeholder": {
+      "name": "Entrez votre nom",
+      "email": "Entrez votre email"
+    }
+  },
+  "messages": {
+    "success": "Opération réalisée avec succès !",
+    "error": "Une erreur s'est produite. Veuillez réessayer."
+  }
+}

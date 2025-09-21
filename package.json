@@ -1,0 +1,67 @@
+{
+  "name": "i18nguard",
+  "version": "1.0.0",
+  "description": "Comprehensive i18n linting and validation tool for JavaScript/TypeScript projects",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@8.15.0",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r --filter=\"./packages/*\" build",
+    "dev": "pnpm -r --parallel dev",
+    "test": "pnpm -r test",
+    "test:coverage": "pnpm -r test:coverage",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean",
+    "preinstall": "npx only-allow pnpm",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish"
+  },
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "localization",
+    "linting",
+    "validation",
+    "react",
+    "nextjs",
+    "typescript",
+    "javascript",
+    "i18next",
+    "formatjs",
+    "react-intl",
+    "lingui"
+  ],
+  "author": "i18nGuard Team",
+  "license": "MIT",
+  "homepage": "https://github.com/i18nguard/i18nguard#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/i18nguard/i18nguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/i18nguard/i18nguard/issues"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

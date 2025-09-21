@@ -2,7 +2,7 @@
   "name": "i18nguard",
   "displayName": "i18nGuard",
   "description": "Comprehensive i18n linting and validation for VS Code",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "i18nguard",
   "engines": {
     "vscode": "^1.80.0"
@@ -44,8 +44,8 @@
         "title": "Generate Report",
         "category": "i18nGuard"
       }
-    ],
-    "configuration": {
+  ],
+  "configuration": {
       "title": "i18nGuard",
       "properties": {
         "i18nguard.enable": {
@@ -90,39 +90,26 @@
           "description": "Enable quick fix actions"
         }
       }
-    },
-    "languages": [
-      {
-        "id": "typescript",
-        "extensions": [
-          ".ts",
-          ".tsx"
-        ]
-      },
-      {
-        "id": "javascript",
-        "extensions": [
-          ".js",
-          ".jsx"
-        ]
-      }
-    ]
+    }
   },
   "scripts": {
     "build": "tsup",
     "build:simple": "node build.js",
     "dev": "tsup --watch",
-    "test": "vitest",
+    "test": "node ./dist/test/runTest.js",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist",
-    "package": "vsce package",
-    "publish": "vsce publish"
+    "package": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.80.0",
     "@vscode/vsce": "^2.19.0",
     "esbuild": "^0.25.10",
+    "mocha": "^10.0.0",
+    "@types/mocha": "^10.0.0",
+    "@vscode/test-electron": "^2.3.8",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"

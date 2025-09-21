@@ -1,14 +1,19 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/extension.ts'],
+  entry: [
+    'src/extension.ts',
+    'src/test/runTest.ts',
+    'src/test/suite/index.ts',
+    'src/test/suite/**/*.test.ts',
+  ],
   format: ['cjs'], // VS Code extensions need CommonJS
   dts: false,
   clean: true,
   splitting: false,
   sourcemap: true,
   minify: false,
-  external: ['vscode'], // Only externalize vscode, bundle everything else
+  external: ['vscode', '@vscode/test-electron', 'mocha'], // External test deps and vscode
   platform: 'node',
   target: 'node16',
   bundle: true, // Bundle all dependencies

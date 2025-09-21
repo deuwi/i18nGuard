@@ -1,0 +1,10 @@
+# Ignore everything recursively by default
+**/*
+
+# Include only what's needed at runtime
+!package.json
+!README.md
+!LICENSE*
+!images/**
+!dist/extension.js
+!dist/extension.js.map

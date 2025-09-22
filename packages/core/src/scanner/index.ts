@@ -200,15 +200,18 @@ export class Scanner {
       if (!catalog) continue;
       
       if (!this.keyExistsInCatalog(fullKey, catalog)) {
+        // Use keyNode positions if available, otherwise fall back to full node
+        const targetNode = call.keyNode || node;
+        
         context.report({
           ruleId: 'I18N002',
           severity: 'error',
           message: `Missing translation key "${fullKey}" in locale "${locale}"`,
           file: context.file,
-          line: node.loc?.start.line || 0,
-          column: node.loc?.start.column || 0,
-          endLine: node.loc?.end.line || 0,
-          endColumn: node.loc?.end.column || 0,
+          line: targetNode.loc?.start.line || 0,
+          column: targetNode.loc?.start.column || 0,
+          endLine: targetNode.loc?.end.line || 0,
+          endColumn: targetNode.loc?.end.column || 0,
           source: fullKey,
           suggestion: {
             type: 'add-key',

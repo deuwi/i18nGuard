@@ -163,4 +163,5 @@ export interface TranslationCall {
   defaultValue?: string;
   variables?: string[];
   component?: string;
+  keyNode?: ASTNode; // Node containing the key string for precise highlighting
 }

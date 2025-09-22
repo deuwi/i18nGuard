@@ -7,14 +7,14 @@ export function App() {
   return (
     <div className="app">
       <header>
-        <h1>{t('common:welcome')}</h1>
+        <h1>{t('app:welcome')}</h1>
         {/* This should be flagged by i18nGuard */}
-        <p>This is a hard-coded string that needs translation</p>
+        <p>This is a hard-coded string that needs translation.</p>
       </header>
       
       <main>
         <button onClick={() => alert('Hello!')}>
-          {t('common:clickMe')}
+          {t('app:clickMe')}
         </button>
         
         {/* Another hard-coded string */}

@@ -117,8 +117,14 @@ export class DiagnosticProvider {
 
         const initialRange = new vscode.Range(startPos, endPos);
 
+        // For missing translation keys, try to highlight only the string literal
+        let range = initialRange;
+        if (finding.ruleId === 'I18N002' && finding.source) {
+          range = this.findStringLiteralRange(document, initialRange, finding.source) || initialRange;
+        }
+
         // Trim whitespace/newlines from range so we only underline the actual text
-  const range = this.trimRange(document, initialRange);
+        range = this.trimRange(document, range);
         
         let severity: vscode.DiagnosticSeverity;
         switch (finding.severity) {
@@ -346,6 +352,41 @@ export class DiagnosticProvider {
       return new vscode.Range(newStart, newEnd);
     } catch {
       return range;
+    }
+  }
+
+  /**
+   * Find the precise range of a string literal within a broader range
+   */
+  private findStringLiteralRange(document: vscode.TextDocument, searchRange: vscode.Range, targetString: string): vscode.Range | null {
+    try {
+      const text = document.getText(searchRange);
+      
+      // Look for the string literal with quotes: 'targetString' or "targetString"
+      const patterns = [
+        `'${targetString}'`,
+        `"${targetString}"`,
+        `\`${targetString}\``
+      ];
+      
+      for (const pattern of patterns) {
+        const index = text.indexOf(pattern);
+        if (index !== -1) {
+          // Calculate positions relative to the search range
+          const baseOffset = document.offsetAt(searchRange.start);
+          const startOffset = baseOffset + index + 1; // +1 to skip the opening quote
+          const endOffset = startOffset + targetString.length;
+          
+          const startPos = document.positionAt(startOffset);
+          const endPos = document.positionAt(endOffset);
+          
+          return new vscode.Range(startPos, endPos);
+        }
+      }
+      
+      return null;
+    } catch {
+      return null;
     }
   }
 

@@ -17,6 +17,9 @@ function App() {
         {/* Test 1: Correct translation - should work */}
         <h1>{t('welcome')}</h1>
         
+        {/* Test 1b: Missing key for testing */}
+        <h2>{t('test.missing.key')}</h2>
+        
         {/* Test 2: Hard-coded string - should be detected */}
         <p>This is still hard-coded text</p>
         

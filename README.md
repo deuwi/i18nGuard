@@ -1,7 +1,29 @@
-# i18nGuard
+# i18nGuard — Internationalization (i18n) Linter for JavaScript/TypeScript
 
-A comprehensive i18n linting and validation tool for JavaScript/TypeScript projects supporting i18next, React-Intl (FormatJS), and Lingui.
-![Sponsor](https://img.shields.io/github/sponsors/deuwi?style=social)
+A fast internationalization linter and validation tool for JS/TS projects. Supports i18next, React‑Intl (FormatJS), and Lingui. Includes a CLI, VS Code integration, GitHub Action (coming), SARIF reports, pseudo‑localization, and translation coverage budgets.
+
+[![Sponsor](https://img.shields.io/github/sponsors/deuwi?style=social)](https://github.com/sponsors/deuwi)
+[![npm version](https://img.shields.io/npm/v/@i18nguard/cli.svg)](https://www.npmjs.com/package/@i18nguard/cli)
+[![npm downloads](https://img.shields.io/npm/dm/@i18nguard/cli.svg)](https://www.npmjs.com/package/@i18nguard/cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#-license)
+
+## Table of Contents
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+- [Packages](#-packages)
+- [Project Status](#-project-status)
+  - [Operational Features](#-operational-features)
+  - [VS Code Extension Features](#-vs-code-extension-features)
+- [Examples](#-examples)
+- [Rule Reference](#-rule-reference)
+- [VS Code Extension](#-vs-code-extension)
+- [GitHub Action](#-github-action-coming-soon)
+- [Contributing](#-contributing)
+- [Sponsors](#-sponsors)
+- [License](#-license)
 
 ## ✨ Features
 
@@ -84,59 +106,72 @@ This monorepo contains the following packages:
 
 - **[@i18nguard/core](./packages/core)** - Core engine and rule system ✅
 - **[@i18nguard/cli](./packages/cli)** - Command-line interface ✅
-- **[@i18nguard/adapters](./packages/adapters)** - Framework adapters (i18next ✅, FormatJS 🚧, Lingui 🚧)
+- **[@i18nguard/adapters](./packages/adapters)** - Framework adapters (i18next ✅, FormatJS ✅, Lingui ✅)
 - **[@i18nguard/reporter](./packages/reporter)** - Report generators (JSON ✅, SARIF ✅, HTML ✅)
-- **[@i18nguard/vscode](./packages/vscode)** - VS Code extension ✅
+- **[@i18nguard/vscode](./packages/vscode)** - VS Code extension (i18next only ✅)
 - **[@i18nguard/action](./packages/action)** - GitHub Action 🚧
 
 **Legend:** ✅ Functional | 🚧 In Development
 
 ## 🎯 Project Status
 
-### ✅ **Operational Features**
+### ✅ Operational Features
 
-#### **Hard-coded Detection (I18N001)**
+#### Hard-coded Detection (I18N001)
 - Detects hard-coded strings in JSX elements
 - Suggests appropriate translation keys
 - Works with React, JSX, TSX files
 
-#### **Missing Keys Detection (I18N002)**
+#### Missing Keys Detection (I18N002)
 - Validates `t()` function calls against loaded catalogs
 - Checks all configured locales
 - Provides specific catalog paths for fixes
 
-#### **Unused Keys Detection (I18N003)**
+#### Unused Keys Detection (I18N003)
 - Identifies translation keys present in catalogs but never used
 - Suggests removal to keep catalogs clean
 - Works across all namespaces and nested keys
 
-#### **i18next Adapter**
+#### i18next Adapter
 - Complete catalog loading with namespace support
 - Proper key flattening and lookup
 - `t()` function call extraction with namespace parsing
 - `<Trans>` component support (being improved)
 
-### 🚧 **In Development**
-- FormatJS and Lingui adapters
+#### FormatJS Adapter
+- Complete implementation for React-Intl projects
+- `formatMessage()` function call detection
+- `<FormattedMessage>` component support
+- ICU message syntax validation
+- Glob-based catalog loading
+
+#### Lingui Adapter
+- Complete implementation for Lingui projects
+- Template literal and macro support
+- `t()` function call extraction
+- `<Trans>` component detection
+
+### 🚧 In Development
+- VS Code extension support for FormatJS and Lingui (currently i18next only)
 - Complete GitHub Action
-- ICU syntax validation
+- ICU syntax validation in VS Code
 - Watch mode and pseudo-localization
 
-### ✅ **VS Code Extension Features**
+### ✅ VS Code Extension Features
 
-#### **Real-time Diagnostics**
+#### Real-time Diagnostics
 - Automatically detects hard-coded strings in TypeScript/JavaScript files
 - Shows missing translation keys with specific locale information
 - Identifies unused translation keys in catalogs
 - Live updates as you type with file watcher integration
 
-#### **Intelligent Quick Fix Actions**
+#### Intelligent Quick Fix Actions
 - **String Externalization**: Converts hard-coded strings to translation calls
 - **Smart Locale Handling**: Writes source text to default locale, `TODO:Translate(source)` to others
 - **Bulk Operations**: Add all missing translation keys at once
 - **Windows Support**: Proper path handling for Windows development
 
-#### **Advanced Features**
+#### Advanced Features
 - **Multi-locale Support**: Works with en, fr, es, and custom locale configurations
 - **Namespace Awareness**: Supports i18next namespaced keys (e.g., `app:greeting`)
 - **Configuration Discovery**: Automatically finds nearest `i18nscan.config.ts`
@@ -202,6 +237,36 @@ export default defineConfig({
 });
 ```
 
+#### For FormatJS/React-Intl Projects
+```typescript
+export default defineConfig({
+  library: 'formatjs',
+  src: ['src/**/*.{ts,tsx,js,jsx}'],
+  locales: ['en', 'fr', 'es'],
+  defaultLocale: 'en',
+  catalogs: {
+    formatjs: {
+      messagesGlobs: ['src/locales/{locale}.json']
+    }
+  }
+});
+```
+
+#### For Lingui Projects
+```typescript
+export default defineConfig({
+  library: 'lingui',
+  src: ['src/**/*.{ts,tsx,js,jsx}'],
+  locales: ['en', 'fr', 'es'],
+  defaultLocale: 'en',
+  catalogs: {
+    lingui: {
+      pathPattern: 'src/locales/{locale}/messages.po'
+    }
+  }
+});
+```
+
 ## 🔧 Installation on Another Project
 
 ### Method 1: pnpm link (Recommended for development)
@@ -229,7 +294,7 @@ pnpm link --global @i18nguard/reporter
     "@i18nguard/cli": "file:../i18nGuard/packages/cli",
     "@i18nguard/core": "file:../i18nGuard/packages/core",
     "@i18nguard/adapters": "file:../i18nGuard/packages/adapters",
-    "@i18nguard/reporter": "file:../i18nGuard/packages/reporter"
+    "@i18nguard/reporter": "file:../i18nguard/packages/reporter"
   }
 }
 ```
@@ -249,74 +314,44 @@ pnpm link --global @i18nguard/reporter
 
 ## 📖 Examples
 
-- **[i18next + React](./examples/i18next-react)** - Basic React app with i18next integration
-- **[VS Code Extension Usage](./packages/vscode/FEATURES.md)** - Complete feature documentation with examples
+- [i18next + React](./examples/i18next-react) - Basic React app with i18next integration
+- [VS Code Extension Usage](./packages/vscode/FEATURES.md) - Complete feature documentation with examples
 - More examples coming soon...
 
-### Live Demo with VS Code Extension
-
-1. **Install the extension** from VSIX:
-   ```bash
-   code --install-extension packages/vscode/i18nguard-1.0.2.vsix
-   ```
-
-2. **Open example project**:
-   ```bash
-   cd examples/i18next-react
-   code .
-   ```
-
-3. **See the extension in action**:
-   - Hard-coded strings are highlighted automatically
-   - Use `Ctrl+.` for Quick Fix actions
-   - Watch as translation files are updated in real-time
-
-## 🔍 Rule Reference
-
-| Rule ID | Description | Severity | Status |
-|---------|-------------|----------|--------|
-| I18N001 | Hard-coded string detected | Warning | ✅ |
-| I18N002 | Missing translation key | Error | ✅ |
-| I18N003 | Unused translation key | Warning | ✅ |
-| I18N201 | ICU syntax error | Error | 🚧 |
-| I18N202 | ICU missing plural forms | Warning | 🚧 |
-
-## � VS Code Extension
+## 🧩 VS Code Extension
 
 The i18nGuard extension provides real-time internationalization linting directly in your VS Code editor.
 
 ### Features
+- ✅ Real-time detection of hard-coded strings
+- ✅ Smart Quick Fixes (one-click externalization with intelligent locale handling)
+- ✅ Bulk operations (add multiple missing keys at once)
+- ✅ Multi-locale support and namespace awareness
+- ✅ Windows-compatible path handling
 
-✅ **Real-time Detection**: Automatically highlights hard-coded strings as you type  
-✅ **Smart Quick Fixes**: One-click externalization with intelligent locale handling  
-✅ **Bulk Operations**: Add multiple missing translation keys at once  
-✅ **Multi-locale Support**: Writes to all configured locales simultaneously  
-✅ **Windows Compatible**: Proper path handling for Windows development  
-✅ **Namespace Aware**: Full support for i18next namespaced keys  
+Note: The VS Code extension currently supports i18next. FormatJS and Lingui are available via the CLI.
 
 ### Installation
 
-1. Install the extension from the VS Code Marketplace (coming soon)
-2. Or install the VSIX file directly:
+1. Install from the VS Code Marketplace (coming soon), or
+2. Install the VSIX file directly:
    ```bash
    code --install-extension i18nguard-1.0.2.vsix
    ```
 
 ### Usage
 
-The extension works automatically once installed:
-
-- **Detection**: Hard-coded strings are highlighted with squiggly underlines
-- **Quick Fix**: Use `Ctrl+.` (Cmd+. on Mac) to see available fixes
-- **Externalization**: Converts `"Hello World"` to `{t('app:greeting')}`
-- **Smart Writing**: 
+- Hard-coded strings are highlighted automatically
+- Use `Ctrl+.` (Cmd+. on Mac) for Quick Fix
+- Externalization converts `"Hello World"` to `{t('app:greeting')}`
+- Smart writing:
   - Default locale (en): `"Hello World"`
   - Other locales (fr, es): `"TODO:Translate(Hello World)"`
 
 ### Commands
 
-- `i18nGuard: Scan for i18n Issues` - Manual scan of current workspace
-- `i18nGuard: Generate Report` - Create HTML/JSON/SARIF reports
+- `i18nGuard: Scan for i18n Issues`
+- `i18nGuard: Generate Report`
 
 ### Configuration
 
@@ -346,10 +381,11 @@ jobs:
 We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
 
 ## 🫶 Sponsors
+
 If you or your company find i18nGuard useful, consider sponsoring to support ongoing development.
 
-    See SPONSORS.md for tiers and benefits.
-    Become a sponsor via GitHub Sponsors.
+- See [SPONSORS.md](./SPONSORS.md) for tiers and benefits.
+- Become a sponsor via [GitHub Sponsors](https://github.com/sponsors/deuwi).
 
 ## 📄 License
 

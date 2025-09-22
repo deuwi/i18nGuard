@@ -1,9 +1,14 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import type { ConfigLoader } from './config';
+import { UniversalCatalogWriter } from './catalogWriter';
 
 export class CodeActionProvider implements vscode.CodeActionProvider {
-  constructor(private configLoader: ConfigLoader) {}
+  private catalogWriter: UniversalCatalogWriter;
+
+  constructor(private configLoader: ConfigLoader) {
+    this.catalogWriter = new UniversalCatalogWriter();
+  }
 
   async provideCodeActions(
     document: vscode.TextDocument,
@@ -168,8 +173,8 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
         return;
       }
 
-  // Write key to i18next catalogs for ALL configured locales
-  await this.writeI18nextCatalogEntryAllLocales(config, key, sourceText, uri);
+  // Write key to catalogs for ALL configured locales
+  await this.catalogWriter.writeEntryAllLocales(config, key, sourceText, uri);
 
   // Refresh diagnostics so the missing-key warning disappears immediately
   try { await vscode.commands.executeCommand('i18nguard.rescanActiveDocument', uri); } catch {}
@@ -213,16 +218,16 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
 
       if (targetLocales.length === 0) {
         // No specific locales -> add to default locale with TODO:Translate
-        await this.writeI18nextCatalogEntry(config, confirmedKey, 'TODO:Translate', uri);
+        await this.catalogWriter.writeEntryToLocale(config, confirmedKey, 'TODO:Translate', uri);
         vscode.window.showInformationMessage(`i18nGuard: Added translation key "${confirmedKey}".`);
       } else if (targetLocales.length === 1) {
         // Single locale
-        await this.writeI18nextCatalogEntry(config, confirmedKey, 'TODO:Translate', uri, targetLocales[0]);
+        await this.catalogWriter.writeEntryToLocale(config, confirmedKey, 'TODO:Translate', uri, targetLocales[0]);
         vscode.window.showInformationMessage(`i18nGuard: Added translation key "${confirmedKey}" to ${targetLocales[0]}.`);
       } else {
         // Multiple locales -> add to all with TODO:Translate
         for (const locale of targetLocales) {
-          await this.writeI18nextCatalogEntry(config, confirmedKey, 'TODO:Translate', uri, locale);
+          await this.catalogWriter.writeEntryToLocale(config, confirmedKey, 'TODO:Translate', uri, locale);
         }
         vscode.window.showInformationMessage(`i18nGuard: Added translation key "${confirmedKey}" to ${targetLocales.length} locales: ${targetLocales.join(', ')}.`);
       }
@@ -245,7 +250,7 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
 
       for (const { key, locales } of missingKeys) {
         for (const locale of locales) {
-          await this.writeI18nextCatalogEntry(config, key, 'TODO:Translate', uri, locale);
+          await this.catalogWriter.writeEntryToLocale(config, key, 'TODO:Translate', uri, locale);
           totalAdded++;
         }
         summary.push(`${key}: ${locales.join(', ')}`);
@@ -310,7 +315,7 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
     const edit = new vscode.WorkspaceEdit();
     
     // Replace the hard-coded string with a translation call
-    const replacement = this.generateTranslationCall(confirmedKey, config.library);
+    const replacement = this.catalogWriter.generateTranslationCall(confirmedKey, config.library);
     edit.replace(document.uri, range, replacement);
 
     // TODO: Add the key to the translation catalog
@@ -335,162 +340,6 @@ export class CodeActionProvider implements vscode.CodeActionProvider {
     }
 
     return `${fileName}.${textSlug}`.substring(0, maxLen);
-  }
-
-  private generateTranslationCall(key: string, library: string): string {
-    switch (library) {
-      case 'i18next':
-        return `{t('${key}')}`;
-      case 'formatjs':
-        return `{formatMessage({ id: '${key}' })}`;
-      case 'lingui':
-        return `{t\`${key}\`}`;
-      default:
-        return `{t('${key}')}`;
-    }
-  }
-
-  private async writeI18nextCatalogEntry(config: any, key: string, sourceText: string, contextUri: vscode.Uri, targetLocale?: string) {
-    try {
-      if (config.library !== 'i18next' && config.library !== 'auto') {
-        return; // only handle i18next for now
-      }
-
-      // Reload config relative to the current document to refresh nearest-config state
-      try { await this.configLoader.loadConfig(contextUri); } catch {}
-
-      // Determine project root based on nearest config directory; fallback to workspace folder of the file
-      const configDir = (this.configLoader as any).getLastConfigDir?.();
-      const projectRoot = (configDir as vscode.Uri) || vscode.workspace.getWorkspaceFolder(contextUri)?.uri;
-      if (!projectRoot) return;
-
-  const defaultLocale: string = config.defaultLocale || 'en';
-      // Support namespaced keys like "ns:key.path"; default to 'common' namespace
-      let ns = 'common';
-      let pureKey = key;
-      const colonIdx = key.indexOf(':');
-      if (colonIdx > 0) {
-        ns = key.slice(0, colonIdx);
-        pureKey = key.slice(colonIdx + 1);
-      }
-      const pattern: string = config.catalogs?.i18next?.pathPattern || 'locales/{locale}/{ns}.json';
-        const resolvedPattern = pattern.replace('{locale}', targetLocale || defaultLocale).replace('{ns}', ns);
-        const isAbsolute = /^(?:[a-zA-Z]:[\\/]|\\\\|\/)/.test(resolvedPattern);
-        let fileUri: vscode.Uri;
-        if (isAbsolute) {
-          // Absolute pathPattern, use it directly
-          fileUri = vscode.Uri.file(resolvedPattern);
-        } else {
-          // Join using segments to avoid encoded slashes in URI
-          const segments = resolvedPattern.split(/[\\/]+/).filter(Boolean);
-          fileUri = vscode.Uri.joinPath(projectRoot, ...segments);
-      }
-
-      // Read existing JSON or start fresh
-      let obj: any = {};
-      try {
-        const buf = await vscode.workspace.fs.readFile(fileUri);
-        const str = Buffer.from(buf).toString('utf8') || '{}';
-        obj = JSON.parse(str);
-      } catch {
-        // file missing or invalid -> start new
-        obj = {};
-      }
-
-  // Set nested value for dot-separated key (without namespace)
-  const parts = pureKey.split('.');
-      this.setNested(obj, parts, sourceText);
-
-  const pretty = JSON.stringify(obj, null, 2);
-
-  // Ensure directory exists (resolve parent directory of the file)
-  const parentFsPath = path.dirname(fileUri.fsPath);
-  const dirUri = vscode.Uri.file(parentFsPath);
-  try { await vscode.workspace.fs.createDirectory(dirUri); } catch {}
-
-      await vscode.workspace.fs.writeFile(fileUri, Buffer.from(pretty, 'utf8'));
-      // Notify path written for user feedback and open the file
-  vscode.window.setStatusBarMessage(`i18nGuard: wrote ${ns} → ${targetLocale || defaultLocale} at ${fileUri.fsPath}`, 3000);
-      try {
-        const writtenDoc = await vscode.workspace.openTextDocument(fileUri);
-        await vscode.window.showTextDocument(writtenDoc, { preview: false });
-      } catch {}
-    } catch (e) {
-      console.error('i18nGuard: failed to write i18next catalog', e);
-      vscode.window.showErrorMessage(`i18nGuard: Failed to write catalog entry: ${String((e as any)?.message || e)}`);
-    }
-  }
-
-  private async writeI18nextCatalogEntryAllLocales(config: any, key: string, sourceText: string, contextUri: vscode.Uri) {
-    try {
-      // Ensure we have the freshest config with locales relative to this file
-      const loaded = await this.configLoader.loadConfig(contextUri);
-      const cfg: any = loaded || config;
-      let locales: string[] = Array.isArray(cfg?.locales) && cfg.locales.length > 0 ? cfg.locales : [cfg?.defaultLocale || 'en'];
-      const defaultLocale = cfg?.defaultLocale || 'en';
-
-      // If only the default locale is present, try to auto-discover sibling locale folders
-      // e.g., public/locales/{locale}/{ns}.json -> discover directories under public/locales
-      try {
-        if (locales.length <= 1 && (cfg?.catalogs?.i18next?.pathPattern || '').includes('{locale}')) {
-          // Parse namespace from key (ns:key)
-          let ns = 'common';
-          const colonIdx = key.indexOf(':');
-          if (colonIdx > 0) ns = key.slice(0, colonIdx);
-
-          const pattern: string = cfg.catalogs?.i18next?.pathPattern || 'locales/{locale}/{ns}.json';
-          // Build a URI to the default locale file to derive the locales root directory
-          const configDir = (this.configLoader as any).getLastConfigDir?.();
-          const projectRoot = (configDir as vscode.Uri) || vscode.workspace.getWorkspaceFolder(contextUri)?.uri;
-          if (projectRoot) {
-            const resolvedForDefault = pattern
-              .replace('{locale}', defaultLocale)
-              .replace('{ns}', ns);
-            const isAbs = /^(?:[a-zA-Z]:[\\/]|\\\\|\/)/.test(resolvedForDefault);
-            const fileUri = isAbs
-              ? vscode.Uri.file(resolvedForDefault)
-              : vscode.Uri.joinPath(
-                  projectRoot,
-                  ...resolvedForDefault.split(/[\\/]+/).filter(Boolean)
-                );
-            // localesRoot = parent of the default locale directory
-            // path looks like <root>/public/locales/en/app.json -> we want <root>/public/locales
-            const defaultLocaleDir = vscode.Uri.file(path.dirname(fileUri.fsPath)); // .../public/locales/en
-            const localesRoot = vscode.Uri.file(path.dirname(defaultLocaleDir.fsPath)); // .../public/locales
-            try {
-              const entries = await vscode.workspace.fs.readDirectory(localesRoot);
-              const discovered = entries
-                .filter(([, type]) => type === vscode.FileType.Directory)
-                .map(([name]) => name)
-                .filter(Boolean);
-              if (discovered.length > 0) {
-                // Merge uniques with any configured locales
-                const set = new Set<string>([...locales, ...discovered]);
-                locales = Array.from(set);
-              }
-            } catch {}
-          }
-        }
-      } catch (e) {
-        console.warn('i18nGuard: locale auto-discovery failed', e);
-      }
-
-      // Write to each locale - sourceText for defaultLocale, TODO:Translate(sourceText) for others
-      const writtenTo: string[] = [];
-      for (const loc of locales) {
-        const value = loc === defaultLocale ? sourceText : `TODO:Translate(${sourceText})`;
-        await this.writeI18nextCatalogEntry(cfg, key, value, contextUri, loc);
-        writtenTo.push(loc);
-      }
-      
-      if (writtenTo.length > 1) {
-        vscode.window.showInformationMessage(
-          `i18nGuard: Wrote key to locales: ${writtenTo.join(', ')} (${defaultLocale}: source text, others: TODO:Translate(source))`
-        );
-      }
-    } catch (e) {
-      console.error('i18nGuard: failed to write catalogs for all locales', e);
-    }
   }
 
   private setNested(obj: any, path: string[], value: any) {

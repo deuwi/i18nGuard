@@ -3,7 +3,7 @@ import { defineConfig } from '../../packages/core/src/index.js';
 export default defineConfig({
   library: 'i18next',
   src: ['src/**/*.{ts,tsx}'],
-  locales: ['en', 'fr', 'es'],
+  locales: ['en', "fr", "es"],
   defaultLocale: 'en',
   catalogs: {
     i18next: {

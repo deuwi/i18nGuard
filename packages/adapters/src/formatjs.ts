@@ -53,6 +53,7 @@ interface TranslationCall {
   defaultValue?: string;
   variables?: string[];
   component?: string;
+  keyNode?: ASTNode; // Node containing the key string for precise highlighting
 }
 
 interface ASTNode {
@@ -178,6 +179,7 @@ export class FormatJSAdapter implements Adapter {
     const messageArg = args[0];
     if (messageArg.type === 'ObjectExpression') {
       let keyName: string | undefined;
+      let keyNode: ASTNode | undefined;
       let defaultValue: string | undefined;
       const variables: string[] = [];
 
@@ -188,6 +190,7 @@ export class FormatJSAdapter implements Adapter {
           
           if (keyType === 'id' && prop.value?.type === 'Literal') {
             keyName = prop.value.value as string;
+            keyNode = prop.value; // Capture the node containing the key string
           } else if (keyType === 'defaultMessage' && prop.value?.type === 'Literal') {
             defaultValue = prop.value.value as string;
           } else if (keyType === 'values' && prop.value?.type === 'ObjectExpression') {
@@ -206,7 +209,8 @@ export class FormatJSAdapter implements Adapter {
           keyName,
           defaultValue,
           variables: variables.length > 0 ? variables : undefined,
-          component: 'formatMessage'
+          component: 'formatMessage',
+          keyNode
         };
       }
     }
@@ -218,6 +222,7 @@ export class FormatJSAdapter implements Adapter {
     const attributes = node.openingElement?.attributes || [];
     
     let keyName: string | undefined;
+    let keyNode: ASTNode | undefined;
     let defaultValue: string | undefined;
     const variables: string[] = [];
     
@@ -228,9 +233,11 @@ export class FormatJSAdapter implements Adapter {
         if (attrName === 'id') {
           if (attr.value?.type === 'Literal') {
             keyName = attr.value.value as string;
+            keyNode = attr.value; // Capture the node containing the key string
           } else if (attr.value?.type === 'JSXExpressionContainer' && 
                      attr.value.expression?.type === 'Literal') {
             keyName = attr.value.expression.value as string;
+            keyNode = attr.value.expression; // Capture the node containing the key string
           }
         } else if (attrName === 'defaultMessage') {
           if (attr.value?.type === 'Literal') {
@@ -258,7 +265,8 @@ export class FormatJSAdapter implements Adapter {
         keyName,
         defaultValue,
         variables: variables.length > 0 ? variables : undefined,
-        component: 'FormattedMessage'
+        component: 'FormattedMessage',
+        keyNode
       };
     }
 

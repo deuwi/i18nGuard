@@ -1,5 +1,6 @@
 import { readFile } from 'fs/promises';
 import { globby } from 'globby';
+import * as path from 'path';
 
 // Temporary type definitions until @i18nguard/core declarations are properly generated
 interface I18nGuardConfig {
@@ -56,6 +57,7 @@ interface TranslationCall {
   defaultValue?: string;
   variables?: string[];
   component?: string;
+  keyNode?: ASTNode; // Node containing the key string for precise highlighting
 }
 
 interface ASTNode {
@@ -96,10 +98,24 @@ export class I18nextAdapter implements Adapter {
     for (const locale of config.locales) {
       catalogs[locale] = {};
       
-      for (const namespace of i18nextConfig.namespaces) {
+      // Build the namespace list: configured + discovered on disk
+      const nsSet = new Set<string>(i18nextConfig.namespaces || []);
+      try {
+        const basePattern = i18nextConfig.pathPattern.replace('{locale}', locale);
+        const globPattern = basePattern.replace('{ns}', '*').replace(/\\/g, '/');
+        const files = await globby(globPattern, { absolute: true });
+        for (const file of files) {
+          const nsName = path.basename(file).replace(/\.[^.]+$/, '');
+          if (nsName) nsSet.add(nsName);
+        }
+      } catch (e) {
+        // ignore discovery errors; we'll fallback to configured namespaces
+      }
+
+      for (const namespace of nsSet) {
         const catalogPath = i18nextConfig.pathPattern
           .replace('{locale}', locale)
-          .replace('{ns}', namespace);
+          .replace('{ns}', String(namespace));
           
         try {
           const content = await readFile(catalogPath, 'utf-8');
@@ -197,7 +213,8 @@ export class I18nextAdapter implements Adapter {
       keyName: actualKey,
       namespace: actualNamespace,
       defaultValue,
-      component: 't'
+      component: 't',
+      keyNode: keyArg
     };
   }
 
@@ -217,7 +234,8 @@ export class I18nextAdapter implements Adapter {
           return {
             keyName: actualKey,
             namespace: actualNamespace,
-            component: 'Trans'
+            component: 'Trans',
+            keyNode: attr.value // Capture the node containing the key string
           };
         }
       }

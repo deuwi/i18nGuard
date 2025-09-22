@@ -34,7 +34,7 @@ i18nGuard brings powerful internationalization (i18n) linting directly to your V
 
 - **VS Code**: Version 1.80 or higher
 - **Project Type**: TypeScript, JavaScript, React (TSX/JSX)
-- **i18n Library**: Currently supports i18next (FormatJS and Lingui coming soon)
+- **i18n Library**: Currently supports **i18next only** (FormatJS and Lingui coming soon)
 - **Configuration**: `i18nscan.config.ts` file in your project
 
 ## 🚀 Getting Started

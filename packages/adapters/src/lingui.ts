@@ -53,6 +53,7 @@ interface TranslationCall {
   defaultValue?: string;
   variables?: string[];
   component?: string;
+  keyNode?: ASTNode; // Node containing the key string for precise highlighting
 }
 
 interface ASTNode {
@@ -119,7 +120,8 @@ export class LinguiAdapter implements Adapter {
     if (messageArg.type === 'StringLiteral' || messageArg.type === 'Literal') {
       return {
         keyName: messageArg.value as string,
-        component: 't'
+        component: 't',
+        keyNode: messageArg // Capture the node containing the key string
       };
     }
 
@@ -134,7 +136,8 @@ export class LinguiAdapter implements Adapter {
         if (attr.value?.type === 'StringLiteral') {
           return {
             keyName: attr.value.value as string,
-            component: 'Trans'
+            component: 'Trans',
+            keyNode: attr.value // Capture the node containing the key string
           };
         }
       }

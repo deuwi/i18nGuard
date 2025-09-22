@@ -1,8 +1,8 @@
 {
   "name": "i18nguard",
   "displayName": "i18nGuard",
-  "description": "Comprehensive i18n linting and validation for VS Code",
-  "version": "1.0.1",
+  "description": "Real-time i18n linting with intelligent quick fixes for TypeScript/JavaScript projects",
+  "version": "1.0.2",
   "publisher": "i18nguard",
   "engines": {
     "vscode": "^1.80.0"
@@ -18,7 +18,11 @@
     "linting",
     "react",
     "typescript",
-    "javascript"
+    "javascript",
+    "i18next",
+    "translation",
+    "quick-fix",
+    "diagnostics"
   ],
   "activationEvents": [
     "onLanguage:typescript",
@@ -35,8 +39,23 @@
         "category": "i18nGuard"
       },
       {
+        "command": "i18nguard.rescanActiveDocument",
+        "title": "Rescan Active Document",
+        "category": "i18nGuard"
+      },
+      {
         "command": "i18nguard.externalizeString",
         "title": "Externalize String",
+        "category": "i18nGuard"
+      },
+      {
+        "command": "i18nguard.addMissingKey",
+        "title": "Add Missing Translation Key",
+        "category": "i18nGuard"
+      },
+      {
+        "command": "i18nguard.addAllMissingKeys",
+        "title": "Add All Missing Translation Keys",
         "category": "i18nGuard"
       },
       {

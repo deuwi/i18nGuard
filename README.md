@@ -86,7 +86,7 @@ This monorepo contains the following packages:
 - **[@i18nguard/cli](./packages/cli)** - Command-line interface ✅
 - **[@i18nguard/adapters](./packages/adapters)** - Framework adapters (i18next ✅, FormatJS 🚧, Lingui 🚧)
 - **[@i18nguard/reporter](./packages/reporter)** - Report generators (JSON ✅, SARIF ✅, HTML ✅)
-- **[@i18nguard/vscode](./packages/vscode)** - VS Code extension 🚧
+- **[@i18nguard/vscode](./packages/vscode)** - VS Code extension ✅
 - **[@i18nguard/action](./packages/action)** - GitHub Action 🚧
 
 **Legend:** ✅ Functional | 🚧 In Development
@@ -118,10 +118,30 @@ This monorepo contains the following packages:
 
 ### 🚧 **In Development**
 - FormatJS and Lingui adapters
-- VS Code extension with real-time diagnostics
 - Complete GitHub Action
 - ICU syntax validation
 - Watch mode and pseudo-localization
+
+### ✅ **VS Code Extension Features**
+
+#### **Real-time Diagnostics**
+- Automatically detects hard-coded strings in TypeScript/JavaScript files
+- Shows missing translation keys with specific locale information
+- Identifies unused translation keys in catalogs
+- Live updates as you type with file watcher integration
+
+#### **Intelligent Quick Fix Actions**
+- **String Externalization**: Converts hard-coded strings to translation calls
+- **Smart Locale Handling**: Writes source text to default locale, `TODO:Translate(source)` to others
+- **Bulk Operations**: Add all missing translation keys at once
+- **Windows Support**: Proper path handling for Windows development
+
+#### **Advanced Features**
+- **Multi-locale Support**: Works with en, fr, es, and custom locale configurations
+- **Namespace Awareness**: Supports i18next namespaced keys (e.g., `app:greeting`)
+- **Configuration Discovery**: Automatically finds nearest `i18nscan.config.ts`
+- **Catalog Writing**: Directly writes to JSON translation files
+- **Progress Feedback**: Clear status messages and validation
 
 ## 📋 Examples
 
@@ -229,8 +249,27 @@ pnpm link --global @i18nguard/reporter
 
 ## 📖 Examples
 
-- **[i18next + React](./examples/i18next-react)** - Basic React app with i18next
+- **[i18next + React](./examples/i18next-react)** - Basic React app with i18next integration
+- **[VS Code Extension Usage](./packages/vscode/FEATURES.md)** - Complete feature documentation with examples
 - More examples coming soon...
+
+### Live Demo with VS Code Extension
+
+1. **Install the extension** from VSIX:
+   ```bash
+   code --install-extension packages/vscode/i18nguard-1.0.2.vsix
+   ```
+
+2. **Open example project**:
+   ```bash
+   cd examples/i18next-react
+   code .
+   ```
+
+3. **See the extension in action**:
+   - Hard-coded strings are highlighted automatically
+   - Use `Ctrl+.` for Quick Fix actions
+   - Watch as translation files are updated in real-time
 
 ## 🔍 Rule Reference
 
@@ -242,14 +281,46 @@ pnpm link --global @i18nguard/reporter
 | I18N201 | ICU syntax error | Error | 🚧 |
 | I18N202 | ICU missing plural forms | Warning | 🚧 |
 
-## 🚧 VS Code Extension (Coming Soon)
+## � VS Code Extension
 
-The i18nGuard extension will provide:
+The i18nGuard extension provides real-time internationalization linting directly in your VS Code editor.
 
-- Real-time detection of hard-coded strings
-- Quick-fix actions to externalize strings
-- Hover documentation and rule explanations
-- Go-to-definition for translation keys
+### Features
+
+✅ **Real-time Detection**: Automatically highlights hard-coded strings as you type  
+✅ **Smart Quick Fixes**: One-click externalization with intelligent locale handling  
+✅ **Bulk Operations**: Add multiple missing translation keys at once  
+✅ **Multi-locale Support**: Writes to all configured locales simultaneously  
+✅ **Windows Compatible**: Proper path handling for Windows development  
+✅ **Namespace Aware**: Full support for i18next namespaced keys  
+
+### Installation
+
+1. Install the extension from the VS Code Marketplace (coming soon)
+2. Or install the VSIX file directly:
+   ```bash
+   code --install-extension i18nguard-1.0.2.vsix
+   ```
+
+### Usage
+
+The extension works automatically once installed:
+
+- **Detection**: Hard-coded strings are highlighted with squiggly underlines
+- **Quick Fix**: Use `Ctrl+.` (Cmd+. on Mac) to see available fixes
+- **Externalization**: Converts `"Hello World"` to `{t('app:greeting')}`
+- **Smart Writing**: 
+  - Default locale (en): `"Hello World"`
+  - Other locales (fr, es): `"TODO:Translate(Hello World)"`
+
+### Commands
+
+- `i18nGuard: Scan for i18n Issues` - Manual scan of current workspace
+- `i18nGuard: Generate Report` - Create HTML/JSON/SARIF reports
+
+### Configuration
+
+Configure via `i18nscan.config.ts` in your project root or VS Code settings.
 
 ## ⚡ GitHub Action (Coming Soon)
 
